@@ -1,0 +1,800 @@
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+      <!-- TAB 5: SEND & CAMPAIGN SETTINGS (DELAY >= 3s, AUTO-STOP, LIVE CONSOLE)     -->
+      <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+      <div class="app-tab-pane" id="tab-campaign">
+        <section class="workspace-section" id="sec-campaign">
+          <div class="section-title-row">
+            <span class="section-title">🚀 කාල පරතරය (Min 3s), ස්වයංක්‍රීය Auto-Stop සහ පණිවිඩ යැවීම (Send & Campaign Console)</span>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-teal" id="btnStartCampaign" onclick="startCampaignNow()">▶️ Start Sending Messages</button>
+              <button class="btn btn-dark" id="btnPauseCampaign" onclick="pauseCampaignNow()">⏸️ Pause / Resume</button>
+              <button class="btn btn-coral" id="btnStopCampaign" onclick="stopCampaignNow()">⏹️ Stop</button>
+            </div>
+          </div>
+
+          <div class="two-col-grid" style="margin-top:14px;">
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="background:#1E212B; padding:14px; border-radius:12px; border:1px solid var(--border-subtle);">
+                <div style="font-size:12.5px; font-weight:700; margin-bottom:8px; color:var(--gold);">
+                  ⏱️ පණිවිඩ යැවීමේ කාල පරතරය (අවම තත්පර 3 පරතරයක් අනිවාර්ය වේ) & Server ACK
+                </div>
+                <div style="display:grid; grid-template-columns: 1.2fr 1fr 1fr auto; gap:10px; align-items:end;">
+                  <div class="input-group">
+                    <label>කාල පරතර ක්‍රමය (Delay Mode):</label>
+                    <select id="delayModeSelect" onchange="toggleDelayModeFields()">
+                      <option value="random">🎲 අහඹු කාල පරතරය (Random Seconds)</option>
+                      <option value="fixed">⏱️ ස්ථිර තත්පර ගණනක් (Fixed Seconds)</option>
+                    </select>
+                  </div>
+                  <div class="input-group" id="minDelayGroup">
+                    <label>අවම තත්පර (Min >= 3s):</label>
+                    <input type="number" id="minDelayInput" value="3" min="3" onchange="enforceMin3Seconds(this)" />
+                  </div>
+                  <div class="input-group" id="maxDelayGroup">
+                    <label>උපරිම තත්පර (Max):</label>
+                    <input type="number" id="maxDelayInput" value="6" min="3" onchange="enforceMin3Seconds(this)" />
+                  </div>
+                  <div class="input-group" id="fixedDelayGroup" style="display:none;">
+                    <label>ස්ථිර තත්පර (Fixed >= 3s):</label>
+                    <input type="number" id="fixedDelayInput" value="4" min="3" onchange="enforceMin3Seconds(this)" />
+                  </div>
+                  <button class="btn btn-dark btn-sm" onclick="saveDelaySettings()">Save Delay</button>
+                </div>
+                <div style="margin-top:10px; font-size:11.5px; color:var(--teal);">
+                  ✅ Server Delivery Confirmation & Auto-Stop: සියලුම දුරකථන අංක වලට පණිවිඩ යවා අවසන් වූ වහාම ස්වයංක්‍රීයව (Auto-Stop) නතර වේ.
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                <span style="font-size:12px; font-weight:700; color:var(--text-secondary);">🖥️ සජීවී පණිවිඩ සහ Server ACK ලොගය (Live Dispatch Feed)</span>
+                <span id="campaignStatusBadge" style="font-size:11.5px; font-weight:700; color:var(--teal);">STATUS: IDLE</span>
+              </div>
+              <div class="console-box" id="liveConsoleBox" style="height:240px;"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+      <!-- TAB 6: DELIVERY REPORTS & EXPORT HUB                                       -->
+      <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+      <div class="app-tab-pane" id="tab-reports">
+        <section class="workspace-section" id="sec-reports">
+          <div class="section-title-row">
+            <div>
+              <span class="section-title">📊 සම්පූර්ණ වාර්තාව සහ Download කිරීම (Delivery Reports)</span>
+              <p style="font-size:12px; color:var(--text-secondary); margin-top:3px;">
+                සම්පූර්ණ වූ ප්‍රතිශතය, ගැටළු ඇතිවූ ප්‍රතිශතය, භාවිතා වූ WhatsApp Account සහ Server ACK අංකය සහිත සම්පූර්ණ වාර්තාව පහතින් Download කරගන්න.
+              </p>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-teal btn-sm" onclick="downloadReport('xlsx')">📥 Excel (.xlsx)</button>
+              <button class="btn btn-dark btn-sm" onclick="downloadReport('csv')">📥 CSV (.csv)</button>
+              <button class="btn btn-dark btn-sm" onclick="downloadReport('json')">📥 JSON (.json)</button>
+              <button class="btn btn-outline btn-sm" onclick="downloadReport('html')">🖨️ Printable HTML Report</button>
+            </div>
+          </div>
+
+          <div class="table-scroll" style="max-height:420px; margin-top:12px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Phone</th>
+                  <th>Recipient Name</th>
+                  <th>Account Used</th>
+                  <th>Media</th>
+                  <th>Server ACK ID</th>
+                  <th>Delay</th>
+                  <th>Status</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody id="reportTableBody">
+                <tr><td colspan="9" style="text-align:center; color:var(--text-secondary);">තවමත් පණිවිඩ යවා නොමැත. "Start Sending Messages" ක්ලික් කරන්න.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+      <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+      <!-- TAB 4: WHATSAPP GROUP CONTACTS EXPORTER (5 ACCOUNTS SEPARATE GROUPS)       -->
+      <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+      <div class="app-tab-pane" id="tab-groups">
+        <section class="workspace-section" id="sec-groups">
+          <div class="section-title-row">
+            <div>
+              <span class="section-title">📥 WhatsApp Group දුරකථන අංක සහ නම් Export කිරීම (5 Accounts Separate Group Exporter)</span>
+              <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">
+                සම්බන්ධ කර ඇති WhatsApp Account් 5 (`Account #1` සිට `Account #5`) ට අදාළ WhatsApp Groups වෙන වෙනම පරීක්ෂා කර, එහි සාමාජිකයින්ගේ <b>දුරකතන අංකය (Phone)</b> සහ <b>නම (Name)</b> <b>Excel (.xlsx)</b>, <b>CSV (.csv)</b> හෝ <b>JSON (.json)</b> ලෙස ලබාගන්න.
+              </p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn btn-teal btn-sm" onclick="loadAllAccountGroups(true)">🔄 සියලුම ගිණුම්වල Groups Refresh කරන්න</button>
+              <button class="btn btn-dark btn-sm" onclick="exportGroupContacts('all', 'all', 'xlsx')">📥 සියලුම ගිණුම් 5හි Groups Excel (.xlsx)</button>
+              <button class="btn btn-dark btn-sm" onclick="exportGroupContacts('all', 'all', 'csv')">📥 සියලුම CSV (.csv)</button>
+              <button class="btn btn-dark btn-sm" onclick="exportGroupContacts('all', 'all', 'json')">📥 සියලුම JSON (.json)</button>
+            </div>
+          </div>
+
+          <!-- Account Filter Sub-Tabs (View All 5 Separately or Filter 1 Account) -->
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; background:#14161D; padding:10px; border-radius:12px; border:1px solid var(--border-subtle); align-items:center; justify-content:space-between;">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;" id="groupAccountFilterBar">
+              <button class="btn btn-teal btn-sm" id="grpFilter_all" onclick="setGroupAccountFilter('all')">🌐 ගිණුම් 5ම වෙන වෙනම පෙන්වන්න (All 5 Accounts)</button>
+              <button class="btn btn-dark btn-sm" id="grpFilter_bot1" onclick="setGroupAccountFilter('bot1')">📱 Account #1</button>
+              <button class="btn btn-dark btn-sm" id="grpFilter_bot2" onclick="setGroupAccountFilter('bot2')">📱 Account #2</button>
+              <button class="btn btn-dark btn-sm" id="grpFilter_bot3" onclick="setGroupAccountFilter('bot3')">📱 Account #3</button>
+              <button class="btn btn-dark btn-sm" id="grpFilter_bot4" onclick="setGroupAccountFilter('bot4')">📱 Account #4</button>
+              <button class="btn btn-dark btn-sm" id="grpFilter_bot5" onclick="setGroupAccountFilter('bot5')">📱 Account #5</button>
+            </div>
+            <div style="display:flex; gap:12px; font-size:12px; font-weight:700;">
+              <span style="color:var(--teal);">මුළු Groups ගණන: <b id="grpSummaryTotalGroups">0</b></span>
+              <span style="color:var(--gold);">මුළු සාමාජික දුරකථන අංක: <b id="grpSummaryTotalMembers">0</b></span>
+            </div>
+          </div>
+
+          <!-- Selected Group Member Preview Panel (Phone Number & Name Table) -->
+          <div id="groupMembersPreviewCard" style="display:none; background:#14161D; border:1px solid rgba(78, 205, 196, 0.45); border-radius:14px; padding:14px; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+              <div>
+                <h4 id="previewGroupTitle" style="font-size:14px; color:var(--teal);">👥 Group සාමාජික ලැයිස්තුව (දුරකතන අංකය සහ නම)</h4>
+                <span id="previewGroupSubtitle" style="font-size:11.5px; color:var(--text-secondary);"></span>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <input type="text" id="groupMemberSearchInput" placeholder="දුරකථන අංකය හෝ නම සොයන්න..." oninput="renderPreviewMembersRows()" style="background:#1E212B; border:1px solid var(--border-subtle); color:#FFF; padding:6px 10px; border-radius:8px; font-size:12px; width:210px;" />
+                <button class="btn btn-teal btn-sm" id="previewBtnExcel">📥 Excel (.xlsx)</button>
+                <button class="btn btn-dark btn-sm" id="previewBtnCsv">📥 CSV (.csv)</button>
+                <button class="btn btn-dark btn-sm" id="previewBtnJson">📥 JSON (.json)</button>
+                <button class="btn btn-outline btn-sm" onclick="document.getElementById('groupMembersPreviewCard').style.display='none'">✕ Close</button>
+              </div>
+            </div>
+            <div class="table-scroll" style="max-height:260px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:55px;">#</th>
+                    <th>දුරකතන අංකය (Phone Number)</th>
+                    <th>නම (Member Name)</th>
+                    <th>Group නම</th>
+                    <th>ගිණුම (Account)</th>
+                    <th>තත්ත්වය (Role)</th>
+                  </tr>
+                </thead>
+                <tbody id="previewGroupMembersTbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 5 Accounts Separate Group Containers -->
+          <div id="accountsGroupsContainer" style="display:flex; flex-direction:column; gap:16px;"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE = (() => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const qBase = params.get('apiBase');
+        if (qBase) return qBase.replace(/\/+$/, '');
+        if (window.location.protocol === 'file:') return 'http://127.0.0.1:5050';
+      } catch (e) {}
+      return '';
+    })();
+
+    const _origFetch = window.fetch.bind(window);
+    window.fetch = function(resource, init) {
+      if (typeof resource === 'string' && resource.startsWith('/api/') && API_BASE) {
+        return _origFetch(API_BASE + resource, init);
+      }
+      return _origFetch(resource, init);
+    };
+
+    function downloadSampleFile(filePath) {
+      window.location.href = (API_BASE || '') + filePath;
+    }
+
+    let appData = {
+      accounts: [],
+      contacts: [],
+      validContactsCount: 0,
+      invalidContactsCount: 0,
+      detectedColumns: ['phone', 'name', 'course', 'amount'],
+      templates: [],
+      campaign: {},
+      settings: {}
+    };
+
+    let selectedMediaPayload = {
+      type: 'none',
+      fileName: '',
+      mimetype: '',
+      base64: ''
+    };
+
+    const TAB_ORDER = [
+      'tab-dashboard',
+      'tab-accounts',
+      'tab-contacts',
+      'tab-groups',
+      'tab-templates',
+      'tab-campaign',
+      'tab-reports'
+    ];
+    let currentActiveTab = 'tab-dashboard';
+    let groupsByAccountData = {};
+    let activeGroupAccountFilter = 'all';
+    let currentPreviewMembers = [];
+
+    function switchMainTab(tabId) {
+      const sectionToTabMap = {
+        'sec-dashboard': 'tab-dashboard',
+        'sec-accounts': 'tab-accounts',
+        'sec-contacts': 'tab-contacts',
+        'sec-groups': 'tab-groups',
+        'sec-templates': 'tab-templates',
+        'sec-campaign': 'tab-campaign',
+        'sec-reports': 'tab-reports'
+      };
+      const resolvedTab = sectionToTabMap[tabId] || tabId || 'tab-dashboard';
+      currentActiveTab = resolvedTab;
+      if (resolvedTab === 'tab-groups') {
+        loadAllAccountGroups(false);
+      }
+
+      document.querySelectorAll('.app-tab-pane').forEach(pane => {
+        if (pane.id === resolvedTab) {
+          pane.classList.add('active');
+          pane.style.display = 'flex';
+        } else {
+          pane.classList.remove('active');
+          pane.style.display = 'none';
+        }
+      });
+
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === resolvedTab);
+      });
+
+      document.querySelectorAll('.top-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === resolvedTab);
+      });
+
+      const scrollEl = document.getElementById('mainScrollContainer');
+      if (scrollEl) scrollEl.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cycleMainTab(dir) {
+      const idx = TAB_ORDER.indexOf(currentActiveTab);
+      const nextIdx = (idx + dir + TAB_ORDER.length) % TAB_ORDER.length;
+      switchMainTab(TAB_ORDER[nextIdx]);
+    }
+
+    function scrollToSection(id, btnEl) {
+      switchMainTab(id);
+    }
+
+    function enforceMin3Seconds(inputEl) {
+      const val = Number(inputEl.value);
+      if (isNaN(val) || val < 3) inputEl.value = 3;
+    }
+
+    function toggleDelayModeFields() {
+      const mode = document.getElementById('delayModeSelect').value;
+      document.getElementById('minDelayGroup').style.display = mode === 'random' ? 'flex' : 'none';
+      document.getElementById('maxDelayGroup').style.display = mode === 'random' ? 'flex' : 'none';
+      document.getElementById('fixedDelayGroup').style.display = mode === 'fixed' ? 'flex' : 'none';
+    }
+
+    function toggleMediaInputs() {
+      const mType = document.getElementById('mediaTypeSelect').value;
+      selectedMediaPayload.type = mType;
+      document.getElementById('mediaFileInputWrap').style.display = mType === 'none' ? 'none' : 'flex';
+    }
+
+    function toggleContactCardFields() {
+      const checked = document.getElementById('attachContactCheckbox').checked;
+      document.getElementById('contactCardFields').style.display = checked ? 'grid' : 'none';
+    }
+
+    function handleMediaFileSelected(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        selectedMediaPayload.fileName = file.name;
+        selectedMediaPayload.mimetype = file.type;
+        selectedMediaPayload.base64 = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function switchContactTab(mode) {
+      document.getElementById('contactPaneType').style.display = mode === 'type' ? 'block' : 'none';
+      document.getElementById('contactPaneExcel').style.display = mode === 'excel' ? 'block' : 'none';
+      document.getElementById('contactPaneJson').style.display = mode === 'json' ? 'block' : 'none';
+      document.getElementById('tabBtnType').className = mode === 'type' ? 'btn btn-teal btn-sm' : 'btn btn-dark btn-sm';
+      document.getElementById('tabBtnExcel').className = mode === 'excel' ? 'btn btn-teal btn-sm' : 'btn btn-dark btn-sm';
+      document.getElementById('tabBtnJson').className = mode === 'json' ? 'btn btn-teal btn-sm' : 'btn btn-dark btn-sm';
+    }
+
+    async function fetchAllData() {
+      try {
+        const [stateRes, contactsRes, tplRes] = await Promise.all([
+          fetch('/api/state').then(r => r.json()),
+          fetch('/api/contacts').then(r => r.json()),
+          fetch('/api/templates').then(r => r.json())
+        ]);
+
+        appData.accounts = stateRes.accounts || [];
+        appData.settings = stateRes.settings || {};
+        appData.campaign = stateRes.campaign || {};
+        appData.contacts = contactsRes.contacts || [];
+        appData.validContactsCount = contactsRes.validCount ?? appData.contacts.filter(c => c.isValid !== false).length;
+        appData.invalidContactsCount = contactsRes.invalidCount ?? appData.contacts.filter(c => c.isValid === false).length;
+        appData.detectedColumns = contactsRes.detectedColumns || ['phone', 'name', 'course'];
+        appData.templates = tplRes.templates || [];
+
+        renderDashboardState(stateRes);
+        renderAccountsGrid();
+        renderContactsTable();
+        renderDetectedColumns();
+        renderTemplatesDropdown();
+        updateLiveTemplatePreview();
+        renderReportTable();
+      } catch (e) {
+        console.error('Poll error:', e);
+      }
+    }
+
+    // Regular live status poll every 1.2s
+    setInterval(async () => {
+      try {
+        const stateRes = await fetch('/api/state').then(r => r.json());
+        appData.accounts = stateRes.accounts || [];
+        appData.campaign = stateRes.campaign || {};
+        renderDashboardState(stateRes);
+        renderAccountsGrid();
+        renderReportTable();
+      } catch (e) {}
+    }, 1200);
+
+    function renderDashboardState(stateRes) {
+      const m = stateRes.metrics || {};
+      const c = stateRes.campaign || {};
+      const s = stateRes.settings || {};
+
+      const validContacts = stateRes.validContactsCount ?? appData.validContactsCount ?? (stateRes.contactsCount || 0);
+      const invalidContacts = stateRes.invalidContactsCount ?? appData.invalidContactsCount ?? 0;
+
+      document.getElementById('navConnectedCount').textContent = `${m.connectedCount || 0}/5`;
+      document.getElementById('heroAccountsSub').textContent = `${m.connectedCount || 0} / 5 Connected • Quota: ${m.totalSentToday || 0}/${m.totalDailyCapacity || 500}`;
+      document.getElementById('heroContactsSub').textContent = `${validContacts} Valid • ${invalidContacts} Invalid • Columns: ${(stateRes.detectedColumns || []).slice(0, 4).join(', ')}`;
+
+      const delayLabel = s.delayMode === 'fixed' ? `${s.fixedDelay || 4}s Fixed` : `${s.minDelay || 3}s - ${s.maxDelay || 7}s`;
+      document.getElementById('statDelayDisplay').textContent = delayLabel;
+
+      const sentToday = m.totalSentToday || 0;
+      const capToday = Math.max(1, m.totalDailyCapacity || 500);
+      const quotaPct = Math.min(100, Math.round((sentToday / capToday) * 100));
+      document.getElementById('statSentToday').textContent = sentToday;
+      document.getElementById('statQuotaPct').textContent = `${quotaPct}%`;
+      document.getElementById('statQuotaCap').textContent = `Capacity: ${capToday}`;
+      document.getElementById('barQuotaFill').style.width = `${Math.max(6, quotaPct)}%`;
+
+      const sentCount = c.total > 0 ? c.sent : (m.totalAllTimeSent || 0);
+      const failedCount = c.total > 0 ? c.failed : (m.totalAllTimeFailed || 0);
+      const successPct = c.total > 0 ? c.completionPercentage : (m.overallSuccessPct ?? 100);
+      const errorPct = c.total > 0 ? c.errorPercentage : (m.overallErrorPct ?? 0);
+
+      document.getElementById('statSentCount').textContent = sentCount;
+      document.getElementById('statFailedCount').textContent = failedCount;
+      document.getElementById('statCompletionPctLabel').textContent = `${successPct}%`;
+      document.getElementById('statErrorPctLabel').textContent = `${errorPct}%`;
+      document.getElementById('statQueueTotalLabel').textContent = `Valid Contacts: ${validContacts} (Invalid: ${invalidContacts})`;
+      document.getElementById('barSentFill').style.width = `${Math.max(5, successPct)}%`;
+      document.getElementById('barErrorFill').style.width = `${Math.max(0, errorPct)}%`;
+
+      document.getElementById('statRotationsLabel').textContent = `Failovers: ${c.accountRotations || 0}`;
+      document.getElementById('statActiveBotLabel').textContent = `Active: ${(c.activeBotId || 'bot1').toUpperCase()}`;
+
+      // Update Donut Charts
+      document.getElementById('donutSuccessValue').textContent = `${successPct}%`;
+      document.getElementById('donutSuccessSub').textContent = `${sentCount} Confirmed Sent`;
+      document.getElementById('donutSuccessRing').setAttribute('stroke-dasharray', `${successPct}, 100`);
+
+      document.getElementById('donutErrorValue').textContent = `${errorPct}%`;
+      document.getElementById('donutErrorSub').textContent = `${failedCount} Failed`;
+      document.getElementById('donutErrorRing').setAttribute('stroke-dasharray', `${errorPct}, 100`);
+
+      document.getElementById('bigTotalConfirmed').textContent = sentCount;
+      if (c.lastServerAckId) {
+        document.getElementById('lastAckBadge').textContent = `✓ Server ACK: ${c.lastServerAckId}`;
+      }
+
+      const isRunning = Boolean(c.isRunning || c.status === 'running' || c.status === 'paused');
+      const btnStart = document.getElementById('btnStartCampaign');
+      const btnPause = document.getElementById('btnPauseCampaign');
+      const btnStop = document.getElementById('btnStopCampaign');
+      const statusDot = document.getElementById('engineStatusDot');
+      const statusBanner = document.getElementById('engineStatusBanner');
+
+      if (btnStart && btnPause && btnStop) {
+        if (isRunning) {
+          btnStart.disabled = true;
+          btnStart.style.opacity = '0.55';
+          btnStart.style.cursor = 'not-allowed';
+          btnStart.textContent = `🔄 Sending (${c.processed || 0}/${c.total || 0})...`;
+
+          btnPause.disabled = false;
+          btnPause.style.opacity = '1';
+          btnPause.style.cursor = 'pointer';
+          btnPause.textContent = c.status === 'paused' ? '▶️ Resume' : '⏸️ Pause';
+
+          btnStop.disabled = false;
+          btnStop.style.opacity = '1';
+          btnStop.style.cursor = 'pointer';
+          btnStop.textContent = '⏹️ Stop';
+        } else {
+          btnStart.disabled = false;
+          btnStart.style.opacity = '1';
+          btnStart.style.cursor = 'pointer';
+          btnStart.textContent = '▶️ Start Sending Messages';
+
+          btnPause.disabled = true;
+          btnPause.style.opacity = '0.45';
+          btnPause.style.cursor = 'not-allowed';
+          btnPause.textContent = '⏸️ Pause / Resume';
+
+          btnStop.disabled = true;
+          btnStop.style.opacity = '0.45';
+          btnStop.style.cursor = 'not-allowed';
+          btnStop.textContent = c.status === 'completed' ? '🛑 Auto-Stopped (Finished)' : '⏹️ Stopped';
+        }
+      }
+
+      if (c.status === 'running' && c.nextMessageCountdownSec > 0) {
+        document.getElementById('activeCountdownLabel').textContent = `⏳ ඊළඟ පණිවිඩය තත්පර ${c.nextMessageCountdownSec}s කින් යැවේ...`;
+      } else if (c.status === 'completed') {
+        document.getElementById('activeCountdownLabel').textContent = `🛑 සියලුම දුරකථන අංක (${c.total}/${c.total}) වෙත පණිවිඩ යවා අවසන් — ස්වයංක්‍රීයව Stop කරන ලදී!`;
+      } else {
+        document.getElementById('activeCountdownLabel').textContent = `⏱️ අවම තත්පර 3s පරතරය සක්‍රීයයි | ${c.stopReason || 'Ready'}`;
+      }
+
+      const badgeEl = document.getElementById('campaignStatusBadge');
+      if (c.status === 'completed') {
+        badgeEl.textContent = `STATUS: 🛑 AUTO-STOPPED (COMPLETED ${c.sent}/${c.total})`;
+        badgeEl.style.color = 'var(--teal)';
+        if (statusBanner) statusBanner.textContent = `🛑 Auto-Stopped: සියලුම දුරකථන අංක (${c.sent}/${c.total}) වෙත පණිවිඩ යවා අවසන්!`;
+        if (statusDot) statusDot.style.background = 'var(--teal)';
+      } else if (c.status === 'stopped_manual' || c.status === 'stopped_limit' || c.status === 'stopped_no_account') {
+        badgeEl.textContent = `STATUS: 🛑 STOPPED (${(c.status || '').toUpperCase()})`;
+        badgeEl.style.color = 'var(--coral)';
+        if (statusBanner) statusBanner.textContent = `🛑 Stopped: ${c.stopReason || 'Campaign Stopped'}`;
+        if (statusDot) statusDot.style.background = 'var(--coral)';
+      } else if (c.status === 'running') {
+        badgeEl.textContent = `STATUS: 🟢 RUNNING (${c.processed || 0}/${c.total || 0})`;
+        badgeEl.style.color = 'var(--gold)';
+        if (statusBanner) statusBanner.textContent = `🚀 පණිවිඩ යවමින් පවතී (${c.processed || 0}/${c.total || 0}) | Active: ${(c.activeBotId || 'bot1').toUpperCase()}`;
+        if (statusDot) statusDot.style.background = 'var(--gold)';
+      } else {
+        badgeEl.textContent = `STATUS: ${(c.status || 'idle').toUpperCase()}`;
+        badgeEl.style.color = 'var(--teal)';
+      }
+
+      // Render 5 Accounts Vertical Bar Chart
+      const barContainer = document.getElementById('accountsBarChart');
+      barContainer.innerHTML = (appData.accounts || []).map(a => {
+        const pct = a.dailyLimit > 0 ? Math.min(100, Math.round((a.sentToday / a.dailyLimit) * 100)) : 0;
+        const fillClass = a.sentToday >= a.dailyLimit ? 'full' : (a.isConnected ? 'online' : '');
+        return `
+          <div class="bar-col">
+            <span class="bar-val-top">${a.sentToday}/${a.dailyLimit}</span>
+            <div class="bar-track-vert">
+              <div class="bar-fill-vert ${fillClass}" style="height: ${Math.max(10, pct)}%;"></div>
+            </div>
+            <span class="bar-label-bottom">BOT 0${a.index} ${a.isConnected ? '🟢' : '⚪'}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Render Console Logs
+      const consoleBox = document.getElementById('liveConsoleBox');
+      consoleBox.innerHTML = (stateRes.logs || []).slice(0, 25).map(l => {
+        const timeStr = new Date(l.time).toLocaleTimeString();
+        return `<div class="log-line ${l.level}">[${timeStr}] ${l.message}</div>`;
+      }).join('');
+    }
+
+    const editedLimits = {};
+    const editedIps = {};
+    const editedProxies = {};
+
+    function onLimitInputEdit(botId, val) {
+      editedLimits[botId] = val;
+    }
+    function onIpInputEdit(botId, val) {
+      editedIps[botId] = val;
+    }
+    function onProxyInputEdit(botId, val) {
+      editedProxies[botId] = val;
+    }
+
+    function renderAccountsGrid() {
+      const grid = document.getElementById('accounts5Grid');
+      const activeId = document.activeElement ? document.activeElement.id : null;
+      const selStart = document.activeElement?.selectionStart;
+      const selEnd = document.activeElement?.selectionEnd;
+
+      grid.innerHTML = (appData.accounts || []).map(a => {
+        const isFull = a.sentToday >= a.dailyLimit;
+        const isIpLocked = Boolean(a.isConnected || a.ipLocked);
+        const cardClass = `bot-slot-card ${a.isConnected ? 'connected' : ''} ${isFull ? 'limit-full' : ''}`;
+        const inputVal = editedLimits[a.id] !== undefined ? editedLimits[a.id] : a.dailyLimit;
+        const ipVal = isIpLocked ? (a.virtualIp || '') : (editedIps[a.id] !== undefined ? editedIps[a.id] : (a.virtualIp || ''));
+        const proxyVal = isIpLocked ? (a.proxyUrl || '') : (editedProxies[a.id] !== undefined ? editedProxies[a.id] : (a.proxyUrl || ''));
+        const fpLabel = Array.isArray(a.deviceFingerprint) && a.deviceFingerprint.length >= 2
+          ? `${a.deviceFingerprint[0]} • ${a.deviceFingerprint[1]}`
+          : (a.deviceName || `Device #${a.index}`);
+
+        let qrHtml = '';
+        if (a.status === 'qr' && a.qrDataUrl) {
+          qrHtml = `<div class="qr-box"><img src="${a.qrDataUrl}" alt="Scan WhatsApp QR" /></div>`;
+        } else if (a.isConnected) {
+          qrHtml = `<div style="background:rgba(78,205,196,0.1); border-radius:10px; padding:10px; text-align:center; font-size:12px; color:var(--teal); font-weight:700;">
+            🟢 Connected<br/><span style="color:#FFF; font-size:13px;">+${a.phone}</span>
+          </div>`;
+        } else {
+          qrHtml = `<div style="background:#14161D; border-radius:10px; padding:10px; text-align:center; font-size:11.5px; color:var(--text-secondary);">
+            ⚪ Disconnected<br/>QR මගින් සම්බන්ධ කරන්න
+          </div>`;
+        }
+
+        const lockBadgeHtml = isIpLocked
+          ? `<span style="background:rgba(78,205,196,0.18); color:var(--teal); border:1px solid rgba(78,205,196,0.45); padding:2px 6px; border-radius:6px; font-size:10px; font-weight:800;" title="Connected වූ පසු IP ලිපිනය ස්ථාවරව අගුළු වැටී ඇත">🔒 IP Locked</span>`
+          : `<span style="color:var(--gold); font-size:10.5px;">Random Unique IP</span>`;
+
+        return `
+          <div class="${cardClass}" id="bot_card_${a.id}">
+            <div class="slot-header">
+              <strong style="font-size:13px;">${a.label}</strong>
+              <span class="slot-badge ${a.isConnected ? 'connected' : (a.status === 'qr' ? 'qr' : 'disconnected')}">
+                ${a.isConnected ? 'ONLINE' : a.status.toUpperCase()}
+              </span>
+            </div>
+
+            ${qrHtml}
+
+            <div class="ip-device-box">
+              <div style="display:flex; justify-content:space-between; align-items:center; color:var(--teal); font-weight:700;">
+                <span>💻 ${fpLabel}</span>
+                ${lockBadgeHtml}
+              </div>
+              <div style="color:#FFF; font-weight:700; font-size:11px;">
+                🌐 Active IP: <span style="color:var(--teal); font-family:monospace;">${a.virtualIp || ipVal}</span>
+              </div>
+              <input
+                type="text"
+                id="ip_${a.id}"
+                value="${ipVal}"
+                placeholder="Separate Random IP"
+                oninput="onIpInputEdit('${a.id}', this.value)"
+                ${isIpLocked ? 'disabled title="Connected වූ ගිණුමක IP ලිපිනය වෙනස් කළ නොහැක"' : ''}
+                style="padding:4px 7px; font-size:11px; font-family:monospace; ${isIpLocked ? 'opacity:0.65; cursor:not-allowed;' : ''}"
+              />
+              <input
+                type="text"
+                id="proxy_${a.id}"
+                value="${proxyVal}"
+                placeholder="Optional Proxy (http://user:pass@ip:port)"
+                oninput="onProxyInputEdit('${a.id}', this.value)"
+                ${isIpLocked ? 'disabled title="Connected වූ ගිණුමක Proxy වෙනස් කළ නොහැක"' : ''}
+                style="padding:4px 7px; font-size:10.5px; ${isIpLocked ? 'opacity:0.65; cursor:not-allowed;' : ''}"
+              />
+              <div style="display:flex; gap:4px;">
+                <button class="btn btn-dark btn-sm" style="flex:1; padding:4px 6px; font-size:10.5px; ${isIpLocked ? 'opacity:0.55; cursor:not-allowed;' : ''}" ${isIpLocked ? 'disabled' : ''} onclick="saveBotNetworkConfig('${a.id}')">${isIpLocked ? '🔒 IP Locked' : '🌐 Save IP'}</button>
+                <button class="btn btn-outline btn-sm" style="padding:4px 6px; font-size:10.5px;" onclick="verifyBotIp('${a.id}')">🔍 Check IP</button>
+              </div>
+            </div>
+
+            <div style="font-size:11.5px; display:flex; justify-content:space-between; color:var(--text-secondary);">
+              <span>අද යැවූ ගණන: <b style="color:#FFF;">${a.sentToday} / ${a.dailyLimit}</b></span>
+              <span>ඉතිරි: <b style="color:var(--teal);">${a.remainingToday}</b></span>
+            </div>
+
+            <div style="display:flex; gap:5px; align-items:center;">
+              <input type="number" id="limit_${a.id}" value="${inputVal}" min="1" oninput="onLimitInputEdit('${a.id}', this.value)" style="width:68px; padding:5px 7px; font-size:11.5px;" />
+              <button class="btn btn-dark btn-sm" style="flex:1;" onclick="updateSingleLimit('${a.id}')">Limit Save</button>
+            </div>
+
+            <div style="display:flex; gap:6px; margin-top:2px;">
+              ${!a.isConnected ? `
+                <button class="btn btn-teal btn-sm" style="flex:1;" onclick="connectBot('${a.id}', false)">📱 QR Connect</button>
+              ` : `
+                <button class="btn btn-coral btn-sm" style="flex:1;" onclick="disconnectBot('${a.id}')">🔌 Disconnect</button>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (activeId && (activeId.startsWith('limit_') || activeId.startsWith('ip_') || activeId.startsWith('proxy_'))) {
+        const restoredInput = document.getElementById(activeId);
+        if (restoredInput && !restoredInput.disabled) {
+          restoredInput.focus();
+          try {
+            if (typeof selStart === 'number') restoredInput.setSelectionRange(selStart, selEnd);
+          } catch (e) {}
+        }
+      }
+    }
+
+    async function saveBotNetworkConfig(botId) {
+      const virtualIp = document.getElementById(`ip_${botId}`)?.value?.trim() || '';
+      const proxyUrl = document.getElementById(`proxy_${botId}`)?.value?.trim() || '';
+      delete editedIps[botId];
+      delete editedProxies[botId];
+      const res = await fetch(`/api/accounts/${botId}/network`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ virtualIp, proxyUrl })
+      }).then(r => r.json());
+      const banner = document.getElementById('botIpVerificationBanner');
+      if (banner) {
+        banner.style.display = 'block';
+        if (res.ok) {
+          banner.style.color = 'var(--teal)';
+          banner.textContent = `✅ [${botId.toUpperCase()}] වෙනම IP ලිපිනය (${res.virtualIp}) සහ Device Fingerprint (${(res.deviceFingerprint || []).join(' • ')}) සුරකින ලදී!`;
+        } else {
+          banner.style.color = 'var(--gold)';
+          banner.textContent = `🔒 ${res.error || 'Connected ගිණුමක IP ලිපිනය වෙනස් කළ නොහැක.'}`;
+        }
+      }
+      fetchAllData();
+    }
+
+    async function verifyBotIp(botId) {
+      const res = await fetch(`/api/accounts/${botId}/check-ip`).then(r => r.json());
+      const banner = document.getElementById('botIpVerificationBanner');
+      if (banner && res.ok) {
+        banner.style.display = 'block';
+        banner.style.color = 'var(--teal)';
+        banner.textContent = res.statusMessage;
+      }
+    }
+
+    async function rotateAllBotIps() {
+      for (const k of Object.keys(editedIps)) delete editedIps[k];
+      const res = await fetch('/api/accounts/rotate-ips', { method: 'POST' }).then(r => r.json());
+      const banner = document.getElementById('botIpVerificationBanner');
+      if (banner) {
+        banner.style.display = 'block';
+        if (res.ok) {
+          banner.style.color = 'var(--teal)';
+          const lockedNote = res.preservedConnectedBots?.length
+            ? ` (🔒 Connected ගිණුම් [${res.preservedConnectedBots.join(', ').toUpperCase()}] හි IP නොවෙනස්ව ආරක්ෂා කරන ලදී)`
+            : '';
+          banner.textContent = `🌐 ${res.message || ''}${lockedNote} — IPs: ${(res.accounts || []).map(a => `${a.id.toUpperCase()}: ${a.virtualIp}`).join(' | ')}`;
+        } else {
+          banner.style.color = 'var(--gold)';
+          banner.textContent = `🔒 ${res.error || 'සියලුම ගිණුම් Connected නිසා IP වෙනස් කරනු නොලැබේ.'}`;
+        }
+      }
+      fetchAllData();
+    }
+
+    async function connectBot(botId, simulate = false) {
+      await fetch(`/api/accounts/${botId}/connect`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ simulate })
+      });
+      fetchAllData();
+    }
+
+    async function connectAllSimulated() {
+      for (const id of ['bot1', 'bot2', 'bot3', 'bot4', 'bot5']) {
+        await connectBot(id, true);
+      }
+    }
+
+    async function disconnectBot(botId) {
+      await fetch(`/api/accounts/${botId}/disconnect`, { method: 'POST' });
+      fetchAllData();
+    }
+
+    async function updateSingleLimit(botId) {
+      const val = Number(document.getElementById(`limit_${botId}`).value) || 100;
+      delete editedLimits[botId];
+      await fetch(`/api/accounts/${botId}/limit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dailyLimit: val })
+      });
+      fetchAllData();
+    }
+
+    async function applyBulkDailyLimit(resetToday) {
+      const val = Number(document.getElementById('bulkDailyLimitInput').value) || 50;
+      for (const k of Object.keys(editedLimits)) delete editedLimits[k];
+      await fetch('/api/accounts/bulk-limit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dailyLimit: val, resetToday })
+      });
+      fetchAllData();
+    }
+
+    let lastAddedPhoneHighlight = '';
+
+    const CLIENT_COUNTRY_PREFIXES = [
+      { code: '971', flag: '🇦🇪', name: 'UAE' },
+      { code: '966', flag: '🇸🇦', name: 'Saudi Arabia' },
+      { code: '974', flag: '🇶🇦', name: 'Qatar' },
+      { code: '965', flag: '🇰🇼', name: 'Kuwait' },
+      { code: '968', flag: '🇴🇲', name: 'Oman' },
+      { code: '973', flag: '🇧🇭', name: 'Bahrain' },
+      { code: '972', flag: '🇮🇱', name: 'Israel' },
+      { code: '960', flag: '🇲🇻', name: 'Maldives' },
+      { code: '880', flag: '🇧🇩', name: 'Bangladesh' },
+      { code: '977', flag: '🇳🇵', name: 'Nepal' },
+      { code: '94', flag: '🇱🇰', name: 'Sri Lanka' },
+      { code: '81', flag: '🇯🇵', name: 'Japan' },
+      { code: '91', flag: '🇮🇳', name: 'India' },
+      { code: '44', flag: '🇬🇧', name: 'UK' },
+      { code: '61', flag: '🇦🇺', name: 'Australia' },
+      { code: '64', flag: '🇳🇿', name: 'New Zealand' },
+      { code: '65', flag: '🇸🇬', name: 'Singapore' },
+      { code: '60', flag: '🇲🇾', name: 'Malaysia' },
+      { code: '82', flag: '🇰🇷', name: 'South Korea' },
+      { code: '86', flag: '🇨🇳', name: 'China' },
+      { code: '49', flag: '🇩🇪', name: 'Germany' },
+      { code: '33', flag: '🇫🇷', name: 'France' },
+      { code: '39', flag: '🇮🇹', name: 'Italy' },
+      { code: '1', flag: '🇺🇸', name: 'USA/Canada' }
+    ];
+
+    function detectCountryFlagClient(digits) {
+      const d = String(digits || '').replace(/\D/g, '');
+      for (const item of CLIENT_COUNTRY_PREFIXES) {
+        if (d.startsWith(item.code)) return item;
+      }
+      return { code: d.slice(0, 2), flag: '🌍', name: 'International' };
+    }
+
+    /**
+     * Supports phone numbers from ALL countries in the world (ITU-T E.164: 7 to 15 digits,
+     * country codes +1..+998 / 001..00998) plus local Sri Lanka (07XXXXXXXX / 7XXXXXXXX)
+     * and local Japan (070/080/090XXXXXXXX) numbers.
+     */
+    function detectClientPhoneNumber(rawStr) {
+      if (!rawStr) return null;
+      const originalStr = String(rawStr).trim();
+      let str = originalStr.replace(/^(?:#?\d{1,3}[.)]\s+|#\d+\s*[-:]\s*)/, '').trim();
+      if (!str) return null;
+
+      let candidate = str;
+      if (/\s+[-–—:|]\s+|[,\t|;]+/.test(str)) {
+        const segments = str.split(/\s+[-–—:|]\s+|[,\t|;]+/).map(s => s.trim()).filter(Boolean);
+        let matchedSeg = null;
+        for (let i = segments.length - 1; i >= 0; i--) {
+          const sub = detectClientPhoneNumber(segments[i]);
+          if (sub) {
+            matchedSeg = { sub, seg: segments[i] };
+            break;
+          }
+        }
+        if (!matchedSeg) return null;
+        const otherParts = segments.filter(s => s !== matchedSeg.seg);
+        return {
+          clean: matchedSeg.sub.clean,
+          raw: matchedSeg.sub.raw,

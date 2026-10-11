@@ -1,0 +1,383 @@
+<div class="tab-panel" id="tab-stickers" style="position:relative; min-height: 520px;">
+  <!-- Pro Desktop Sticker Studio Toolbar Header -->
+  <div class="card" style="margin-bottom:14px; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, var(--primary), #8b5cf6); display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px; box-shadow:0 4px 12px rgba(79,195,198,0.3);">
+        <i class="fas fa-magic"></i>
+      </div>
+      <div>
+        <div style="font-size:15px; font-weight:700; color:var(--txt); display:flex; align-items:center; gap:8px;">
+          <span>WhatsApp Pro Sticker Studio</span>
+          <span style="font-size:10px; padding:2px 8px; border-radius:12px; background:rgba(79,195,198,0.15); color:var(--primary); font-weight:700; border:1px solid rgba(79,195,198,0.3);">DESKTOP PRO SUITE</span>
+        </div>
+        <div style="font-size:11.5px; color:var(--txt2);">
+          Professional 512x512 Canvas &bull; Multi-layer Stickers &bull; AI Magic Wand &bull; Freehand Eraser &bull; Text & Emoji Badges
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div style="display:flex; align-items:center; gap:8px;">
+      <input type="file" id="stk-file-input" accept="image/*" style="display:none;" onchange="handleStickerImageUpload(event)">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="stkResetAll()" title="Reset workspace">
+        <i class="fas fa-trash-alt" style="margin-right:5px;"></i> New
+      </button>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="stkUndo()" id="stk-btn-undo" title="Undo (Ctrl+Z)">
+        <i class="fas fa-undo" style="margin-right:4px;"></i> Undo
+      </button>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="stkRedo()" id="stk-btn-redo" title="Redo (Ctrl+Y)">
+        <i class="fas fa-redo" style="margin-right:4px;"></i> Redo
+      </button>
+      <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('stk-file-input').click()">
+        <i class="fas fa-upload" style="margin-right:6px;"></i> Import Photo
+      </button>
+      <button type="button" class="btn btn-green btn-sm" onclick="saveStickerToCatalog()">
+        <i class="fas fa-save" style="margin-right:6px;"></i> Save to Library
+      </button>
+    </div>
+  </div>
+
+  <!-- Studio Workspace Grid: 3 Columns -->
+  <div style="display:grid; grid-template-columns: 260px minmax(360px, 1fr) 280px; gap:14px; align-items:start;">
+    
+    <!-- ════ COLUMN 1: Tools & Layers Panel ════ -->
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      
+      <!-- Primary Tool Tabs -->
+      <div class="card" style="padding:12px;">
+        <div style="font-size:11px; font-weight:700; color:var(--txt3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">
+          <i class="fas fa-toolbox" style="margin-right:5px; color:var(--primary);"></i> Studio Tools
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+          <button type="button" class="btn btn-sm stk-tool-btn active" data-tool="select" onclick="stkSetTool('select')">
+            <i class="fas fa-mouse-pointer" style="margin-right:5px;"></i> Select / Move
+          </button>
+          <button type="button" class="btn btn-sm btn-ghost stk-tool-btn" data-tool="crop" onclick="stkSetTool('crop')">
+            <i class="fas fa-crop-alt" style="margin-right:5px;"></i> Shape Cut
+          </button>
+          <button type="button" class="btn btn-sm btn-ghost stk-tool-btn" data-tool="magic" onclick="stkSetTool('magic')">
+            <i class="fas fa-wand-magic-sparkles" style="margin-right:5px; color:#fbbf24;"></i> Magic Wand
+          </button>
+          <button type="button" class="btn btn-sm btn-ghost stk-tool-btn" data-tool="eraser" onclick="stkSetTool('eraser')">
+            <i class="fas fa-eraser" style="margin-right:5px; color:#ec4899;"></i> Eraser
+          </button>
+          <button type="button" class="btn btn-sm btn-ghost stk-tool-btn" data-tool="brush" onclick="stkSetTool('brush')">
+            <i class="fas fa-paint-brush" style="margin-right:5px; color:#34d399;"></i> Restore
+          </button>
+          <button type="button" class="btn btn-sm btn-ghost stk-tool-btn" data-tool="text" onclick="stkSetTool('text')">
+            <i class="fas fa-font" style="margin-right:5px; color:#60a5fa;"></i> Text / Meme
+          </button>
+        </div>
+      </div>
+
+      <!-- Tool Options Sub-Card (Dynamic based on selected tool) -->
+      <div class="card" id="stk-tool-options-card" style="padding:12px;">
+        <!-- Sub-panel: Magic Wand & Cutout -->
+        <div id="stk-opt-magic" class="stk-tool-subpanel" style="display:none;">
+          <div style="font-size:11.5px; font-weight:700; color:var(--txt); margin-bottom:8px;">
+            <i class="fas fa-wand-magic-sparkles" style="color:#fbbf24; margin-right:4px;"></i> Magic Wand Background Remover
+          </div>
+          <p style="font-size:10.5px; color:var(--txt2); margin-bottom:10px;">
+            Click any color or background on canvas to remove it instantly with smart flood tolerance.
+          </p>
+          <div style="margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--txt2); margin-bottom:3px;">
+              <span>Color Tolerance:</span>
+              <span id="stk-magic-tol-val" style="font-weight:700; color:var(--primary);">32</span>
+            </div>
+            <input type="range" id="stk-magic-tol" min="5" max="100" value="32" oninput="document.getElementById('stk-magic-tol-val').textContent=this.value" style="width:100%;">
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAutoRemoveCorners()" style="flex:1;" title="Auto-detect white/grey background from corners">
+              <i class="fas fa-bolt" style="margin-right:4px;"></i> Auto-Clean Bg
+            </button>
+          </div>
+        </div>
+
+        <!-- Sub-panel: Eraser & Brush -->
+        <div id="stk-opt-eraser" class="stk-tool-subpanel" style="display:none;">
+          <div style="font-size:11.5px; font-weight:700; color:var(--txt); margin-bottom:8px;">
+            <i class="fas fa-eraser" style="color:#ec4899; margin-right:4px;"></i> Manual Eraser & Restore Brush
+          </div>
+          <div style="margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--txt2); margin-bottom:3px;">
+              <span>Brush Size:</span>
+              <span id="stk-brush-size-val" style="font-weight:700; color:var(--primary);">25px</span>
+            </div>
+            <input type="range" id="stk-brush-size" min="4" max="80" value="25" oninput="document.getElementById('stk-brush-size-val').textContent=this.value+'px'" style="width:100%;">
+          </div>
+          <div style="font-size:10px; color:var(--txt3);">
+            <i class="fas fa-info-circle"></i> Drag on canvas to erase pixels or switch to "Restore" to paint back.
+          </div>
+        </div>
+
+        <!-- Sub-panel: Shape Cutout -->
+        <div id="stk-opt-crop" class="stk-tool-subpanel" style="display:none;">
+          <div style="font-size:11.5px; font-weight:700; color:var(--txt); margin-bottom:8px;">
+            <i class="fas fa-shapes" style="color:var(--primary); margin-right:4px;"></i> Preset Shape Mask
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:8px;">
+            <button type="button" class="btn btn-xs stk-shape-btn active" data-shape="original" onclick="setStickerShape('original')">
+              <i class="fas fa-square" style="margin-right:4px;"></i> Free/Orig
+            </button>
+            <button type="button" class="btn btn-xs btn-ghost stk-shape-btn" data-shape="circle" onclick="setStickerShape('circle')">
+              <i class="fas fa-circle" style="margin-right:4px;"></i> Circle
+            </button>
+            <button type="button" class="btn btn-xs btn-ghost stk-shape-btn" data-shape="rounded" onclick="setStickerShape('rounded')">
+              <i class="fas fa-square-full" style="border-radius:4px; margin-right:4px;"></i> Rounded
+            </button>
+            <button type="button" class="btn btn-xs btn-ghost stk-shape-btn" data-shape="heart" onclick="setStickerShape('heart')">
+              <i class="fas fa-heart" style="margin-right:4px; color:#ec4899;"></i> Heart
+            </button>
+            <button type="button" class="btn btn-xs btn-ghost stk-shape-btn" data-shape="star" onclick="setStickerShape('star')">
+              <i class="fas fa-star" style="margin-right:4px; color:#fbbf24;"></i> Star
+            </button>
+            <button type="button" class="btn btn-xs btn-ghost stk-shape-btn" data-shape="badge" onclick="setStickerShape('badge')">
+              <i class="fas fa-certificate" style="margin-right:4px; color:#34d399;"></i> Badge
+            </button>
+          </div>
+        </div>
+
+        <!-- Sub-panel: Text & Meme Overlay -->
+        <div id="stk-opt-text" class="stk-tool-subpanel">
+          <div style="font-size:11.5px; font-weight:700; color:var(--txt); margin-bottom:8px;">
+            <i class="fas fa-font" style="color:#60a5fa; margin-right:4px;"></i> Text & Meme Captions
+          </div>
+          <div style="display:flex; gap:6px; margin-bottom:8px;">
+            <input type="text" id="stk-text-input" class="fc" placeholder="Type meme caption..." oninput="onStickerTextInput(this.value)" style="font-size:12px; padding:6px 8px; flex:1;">
+            <button type="button" class="btn btn-primary btn-xs" onclick="stkAddTextLayer()" title="Add as new movable text layer">
+              <i class="fas fa-plus"></i> Add
+            </button>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:11px; margin-bottom:8px;">
+            <div>
+              <span style="color:var(--txt2); display:block; margin-bottom:2px;">Font Family:</span>
+              <select id="stk-font-family" class="fc" style="height:26px; padding:2px 4px; font-size:11px;" onchange="stkOnFontFamily(this.value)">
+                <option value="Impact">Impact (Classic Meme)</option>
+                <option value="'Arial Black', sans-serif">Arial Black</option>
+                <option value="'Inter', sans-serif">Inter Clean</option>
+                <option value="'Comic Sans MS', cursive">Comic Fun</option>
+                <option value="'Trebuchet MS', sans-serif">Modern Bold</option>
+                <option value="'Courier New', monospace">Vintage Type</option>
+              </select>
+            </div>
+            <div>
+              <span style="color:var(--txt2); display:block; margin-bottom:2px;">Size (<span id="stk-font-size-val">38px</span>):</span>
+              <input type="range" id="stk-font-size-slider" min="16" max="72" value="38" oninput="onStickerFontSize(this.value)" style="width:100%;">
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:11px;">
+            <div>
+              <span style="color:var(--txt2); display:block; margin-bottom:2px;">Text Fill:</span>
+              <input type="color" id="stk-text-color" value="#ffffff" onchange="onStickerTextColor(this.value)" style="width:100%; height:26px; border:1px solid var(--border); border-radius:4px; padding:0; cursor:pointer;">
+            </div>
+            <div>
+              <span style="color:var(--txt2); display:block; margin-bottom:2px;">Outline Stroke:</span>
+              <input type="color" id="stk-stroke-color" value="#000000" onchange="onStickerStrokeColor(this.value)" style="width:100%; height:26px; border:1px solid var(--border); border-radius:4px; padding:0; cursor:pointer;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticker Die-Cut Outline / Border -->
+      <div class="card" style="padding:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <label style="font-weight:700; font-size:11.5px; color:var(--txt); cursor:pointer; display:flex; align-items:center; gap:6px;">
+            <input type="checkbox" id="stk-border-enable" onchange="toggleStickerBorder(this.checked)" checked>
+            <span>Die-Cut Sticker Border</span>
+          </label>
+          <span id="stk-border-val" style="font-size:11px; color:var(--primary); font-weight:700;">8px</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 40px; gap:8px; align-items:center;">
+          <input type="range" id="stk-border-slider" min="0" max="28" value="8" step="1" oninput="onStickerBorderSlider(this.value)" style="width:100%;">
+          <input type="color" id="stk-border-color" value="#ffffff" onchange="onStickerBorderColor(this.value)" title="Border Color" style="width:100%; height:26px; border:1px solid var(--border); border-radius:4px; padding:0; cursor:pointer;">
+        </div>
+      </div>
+
+      <!-- Emoji & Decor Badges Quick Inserter -->
+      <div class="card" style="padding:12px;">
+        <div style="font-size:11px; font-weight:700; color:var(--txt3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">
+          <i class="fas fa-icons" style="margin-right:5px; color:#ec4899;"></i> Quick Stickers & Emojis
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:5px; max-height:86px; overflow-y:auto; padding:2px;">
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('🔥')" style="font-size:15px; padding:4px 7px;">🔥</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('😂')" style="font-size:15px; padding:4px 7px;">😂</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('😎')" style="font-size:15px; padding:4px 7px;">😎</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('❤️')" style="font-size:15px; padding:4px 7px;">❤️</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('🎉')" style="font-size:15px; padding:4px 7px;">🎉</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('💯')" style="font-size:15px; padding:4px 7px;">💯</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('🚀')" style="font-size:15px; padding:4px 7px;">🚀</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('⭐')" style="font-size:15px; padding:4px 7px;">⭐</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('👍')" style="font-size:15px; padding:4px 7px;">👍</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('👑')" style="font-size:15px; padding:4px 7px;">👑</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('💬')" style="font-size:15px; padding:4px 7px;">💬</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('⚡')" style="font-size:15px; padding:4px 7px;">⚡</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('👀')" style="font-size:15px; padding:4px 7px;">👀</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('✨')" style="font-size:15px; padding:4px 7px;">✨</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('🎯')" style="font-size:15px; padding:4px 7px;">🎯</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('📢')" style="font-size:15px; padding:4px 7px;">📢</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('💡')" style="font-size:15px; padding:4px 7px;">💡</button>
+          
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkAddEmoji('✅')" style="font-size:15px; padding:4px 7px;">✅</button>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ COLUMN 2: 512x512 Interactive Canvas Workspace ════ -->
+    <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+      
+      <!-- Canvas Canvas Frame Card -->
+      <div class="card" style="padding:14px; width:100%; display:flex; flex-direction:column; align-items:center; background:var(--bg2);">
+        
+        <!-- Canvas Header Bar with Zoom & Background Presets -->
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-bottom:10px; font-size:11.5px; color:var(--txt2);">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-weight:700; color:var(--txt);">512 &times; 512 px</span>
+            <span style="font-size:10px; color:var(--txt3);">(Official WebP Format)</span>
+          </div>
+          
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:11px;">Preview Bg:</span>
+            <button type="button" class="btn btn-ghost btn-xs stk-bg-btn active" data-bg="checker" onclick="setStickerBg('checker')" title="Transparent grid">
+              🏁 Checker
+            </button>
+            <button type="button" class="btn btn-ghost btn-xs stk-bg-btn" data-bg="dark" onclick="setStickerBg('dark')" title="WhatsApp Dark Chat">
+              🌙 WA Dark
+            </button>
+            <button type="button" class="btn btn-ghost btn-xs stk-bg-btn" data-bg="light" onclick="setStickerBg('light')" title="WhatsApp Light Chat">
+              ☀️ WA Light
+            </button>
+          </div>
+        </div>
+
+        <!-- 512x512 Canvas Interactive Box -->
+        <div id="stk-canvas-container" style="width:340px; height:340px; border-radius:14px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.4); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; background: repeating-conic-gradient(rgba(0,0,0,0.08) 0% 25%, transparent 0% 50%) 50% / 16px 16px; position:relative; cursor:crosshair; user-select:none;">
+          <canvas id="stk-editor-canvas" width="512" height="512" style="width:100%; height:100%; display:block; touch-action:none;"></canvas>
+          
+          <!-- Floating Interactive Tooltip / Cursor HUD -->
+          <div id="stk-hud-indicator" style="position:absolute; bottom:8px; right:8px; background:rgba(0,0,0,0.65); backdrop-filter:blur(4px); color:#fff; font-size:10px; padding:3px 8px; border-radius:12px; pointer-events:none; display:flex; align-items:center; gap:5px;">
+            <span id="stk-hud-tool">Tool: Select</span>
+          </div>
+        </div>
+
+        <!-- Bottom Quick Canvas Controls -->
+        <div style="display:flex; justify-content:space-between; align-items:center; width:100%; max-width:340px; margin-top:10px; font-size:11px; color:var(--txt2);">
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkRotateImage(-90)" title="Rotate Left 90°">
+              <i class="fas fa-undo"></i> -90°
+            </button>
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkRotateImage(90)" title="Rotate Right 90°">
+              <i class="fas fa-redo"></i> +90°
+            </button>
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkFlipImage('h')" title="Flip Horizontal">
+              <i class="fas fa-arrows-alt-h"></i> Flip H
+            </button>
+            <button type="button" class="btn btn-ghost btn-xs" onclick="stkFlipImage('v')" title="Flip Vertical">
+              <i class="fas fa-arrows-alt-v"></i> Flip V
+            </button>
+          </div>
+          <button type="button" class="btn btn-ghost btn-xs" onclick="stkFitCanvas()" title="Center & fit image">
+            <i class="fas fa-compress-arrows-alt"></i> Center Fit
+          </button>
+        </div>
+      </div>
+
+      <!-- Big Export & Action Banner -->
+      <div class="card" style="padding:14px; width:100%; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn btn-primary" onclick="saveStickerToCatalog()" style="padding:8px 16px;">
+            <i class="fas fa-save" style="margin-right:6px;"></i> Save to Library
+          </button>
+          <button type="button" class="btn btn-green" onclick="useStickerInCampaign()" style="padding:8px 16px;">
+            <i class="fas fa-paper-plane" style="margin-right:6px;"></i> Use in Campaign
+          </button>
+          <button type="button" class="btn btn-ghost" onclick="downloadStickerWebp()" style="padding:8px 14px;" title="Download high quality .webp file for WhatsApp">
+            <i class="fas fa-download" style="margin-right:6px;"></i> Export WebP
+          </button>
+        </div>
+        <div style="font-size:11px; color:var(--txt3);">
+          ⚡ Instant WhatsApp WebP Engine
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ COLUMN 3: Real-Time Adjustments & Library ════ -->
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      
+      <!-- Color Filters & Adjustments -->
+      <div class="card" style="padding:12px;">
+        <div style="font-size:11px; font-weight:700; color:var(--txt3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">
+          <i class="fas fa-sliders-h" style="margin-right:5px; color:var(--primary);"></i> Color Filters & FX
+        </div>
+        
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:11px;">
+          <div>
+            <div style="display:flex; justify-content:space-between; color:var(--txt2); margin-bottom:2px;">
+              <span>Brightness:</span>
+              <span id="stk-fx-bright-val">100%</span>
+            </div>
+            <input type="range" id="stk-fx-bright" min="50" max="170" value="100" oninput="stkOnFilterChange()" style="width:100%;">
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; color:var(--txt2); margin-bottom:2px;">
+              <span>Contrast:</span>
+              <span id="stk-fx-contrast-val">100%</span>
+            </div>
+            <input type="range" id="stk-fx-contrast" min="50" max="170" value="100" oninput="stkOnFilterChange()" style="width:100%;">
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; color:var(--txt2); margin-bottom:2px;">
+              <span>Saturation:</span>
+              <span id="stk-fx-sat-val">100%</span>
+            </div>
+            <input type="range" id="stk-fx-sat" min="0" max="200" value="100" oninput="stkOnFilterChange()" style="width:100%;">
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-top:10px;">
+          <button type="button" class="btn btn-ghost btn-xs" onclick="stkApplyPresetFilter('normal')">Normal</button>
+          <button type="button" class="btn btn-ghost btn-xs" onclick="stkApplyPresetFilter('vibrant')">🎨 Vibrant</button>
+          <button type="button" class="btn btn-ghost btn-xs" onclick="stkApplyPresetFilter('bw')">🖤 Mono B&W</button>
+          <button type="button" class="btn btn-ghost btn-xs" onclick="stkApplyPresetFilter('vintage')">📸 Vintage</button>
+        </div>
+      </div>
+
+      <!-- Saved Stickers Quick Catalog in Sidebar -->
+      <div class="card" style="padding:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:11.5px; font-weight:700; color:var(--txt);">
+            <i class="fas fa-layer-group" style="margin-right:5px; color:var(--primary);"></i> Saved Library
+          </div>
+          <button type="button" class="btn btn-ghost btn-xs" onclick="loadSavedStickersCatalog()" title="Refresh stickers">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
+
+        <!-- Catalog Scroll Grid -->
+        <div id="stk-catalog-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(80px, 1fr)); gap:8px; max-height:280px; overflow-y:auto; padding:2px;">
+          <div style="text-align:center; color:var(--txt3); font-size:11px; grid-column:1/-1; padding:20px;">
+            Loading saved stickers...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

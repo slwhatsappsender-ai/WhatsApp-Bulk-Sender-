@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Desktop Bot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero-gradient { background: linear-gradient(135deg, #0d9488 0%, #059669 100%); }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased bg-gray-50">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <i class="fab fa-whatsapp text-green-500 text-3xl mr-2"></i>
+                    <span class="font-bold text-xl text-gray-900">WA Bot</span>
+                </div>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features" class="text-gray-600 hover:text-green-600 transition">Features</a>
+                    <a href="#benefits" class="text-gray-600 hover:text-green-600 transition">Benefits</a>
+                    <a href="#faq" class="text-gray-600 hover:text-teal-600 font-medium transition">FAQ</a>
+                    
+                </div>
+                <div class="hidden md:flex">
+                    <a href="#pricing" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full font-medium transition">Get Started</a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-green-600 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg absolute w-full left-0 top-16 border-t border-gray-100 px-4 pb-4">
+            <div class="flex flex-col space-y-2 pt-2">
+                <a href="#features" class="block py-2 text-gray-600 hover:text-green-600 font-medium">Features</a>
+                <a href="#benefits" class="block py-2 text-gray-600 hover:text-green-600 font-medium">Benefits</a>
+                <a href="#faq" class="block text-gray-600 hover:text-teal-600 font-medium">FAQ</a>
+                    <a href="#faq" class="text-gray-600 hover:text-teal-600 font-medium transition">FAQ</a>
+                
+                <a href="#pricing" class="block py-2 text-center bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition">Get Started</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-20 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center">
+            <div class="lg:w-1/2 lg:pr-12 text-center lg:text-left mb-12 lg:mb-0">
+                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-6">Automate Your Marketing with WhatsApp Desktop Bot</h1>
+                <p class="text-lg md:text-xl text-green-100 mb-8">A powerful, 100% secure Desktop Software. Reach thousands of customers instantly while keeping all your data safely stored on your own PC.</p>
+                <div class="flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="https://github.com/slwhatsappsender-ai/WhatsApp-Bulk-Sender-/releases/download/v3.0.0/whatsapp-bot-desktop-pro.Setup.3.0.0.exe" class="bg-white text-green-700 px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-lg flex items-center justify-center gap-2">
+                        <i class="fab fa-windows"></i> Download (.exe)
+                    </a>
+                    <a href="#pricing" class="border-2 border-white text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-white hover:text-green-700 transition">Buy Now</a>
+                </div>
+            </div>
+            <div class="lg:w-1/2">
+                <img src="images/hero.jpg" alt="WhatsApp Desktop Bot Dashboard" class="rounded-xl shadow-2xl transform hover:scale-105 transition duration-500">
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us / Benefits Section -->
+    <section id="benefits" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Why WhatsApp Desktop Bot?</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-16">Supercharge your marketing efforts. Our desktop software is designed to make reaching your audience simple, incredibly fast, and 100% secure since your data never leaves your computer.</p>
+            
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="p-6 bg-gray-50 rounded-xl">
+                    <div class="w-14 h-14 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Save Massive Time</h3>
+                    <p class="text-gray-600">Automate repetitive tasks. Send personalized messages to thousands of contacts with a single click while you focus on what matters most.</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-xl">
+                    <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Reach Customers Easily</h3>
+                    <p class="text-gray-600">Directly land in your customers' pockets. WhatsApp has an astonishing open rate compared to emails, ensuring your message is seen.</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-xl">
+                    <div class="w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Smart Anti-Ban Tech</h3>
+                    <p class="text-gray-600">Built-in random delays, message variation, and smart sending algorithms protect your accounts from being blocked.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="lg:w-1/2">
+                    <img src="images/features.jpg" alt="Marketing Automation" class="rounded-xl shadow-lg">
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-8">Everything You Need to Succeed</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-bullhorn text-green-500 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-gray-900">Campaign Management</h4>
+                                <p class="text-gray-600">Create, schedule, and run multiple broadcast campaigns seamlessly.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-file-alt text-green-500 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-gray-900">Message Templates</h4>
+                                <p class="text-gray-600">Send highly personalized messages using dynamic variables (like Hi {{name}}) to increase engagement. Save them as templates with multimedia attachments for quick reuse.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-address-book text-green-500 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-gray-900">Contact Management</h4>
+                                <p class="text-gray-600">Import/export contacts easily. Filter and group your audience for targeted messaging.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-robot text-green-500 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-gray-900">Smart Auto-reply</h4>
+                                <p class="text-gray-600">Set up keyword-based auto-responders to handle customer queries 24/7 automatically.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-chart-line text-green-500 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-gray-900">Detailed Reports</h4>
+                                <p class="text-gray-600">Track sent, failed, and read messages to analyze the performance of your campaigns.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-mobile-alt text-green-500 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-gray-900">Multiple Accounts</h4>
+                                <p class="text-gray-600">Connect and manage multiple WhatsApp numbers from a single dashboard.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    
+
+    <!-- Footer -->
+    
+    <!-- FAQ Section -->
+    
+
+    
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-white">
+        <div class="container mx-auto px-6 max-w-4xl relative">
+            <div class="text-center mb-10">
+                <p class="text-gray-500 mb-8">Cannot find answers here? <a href="#contact" class="text-teal-600 font-semibold hover:underline">Contact us</a> at our Support</p>
+            </div>
+            
+            <div class="space-y-4 relative z-10" id="accordion-container">
+                
+                <!-- FAQ Item 1 -->
+                <div class="border border-gray-200 rounded-xl bg-white overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none faq-btn">
+                        <span class="font-bold text-gray-800">What is WhatsApp Desktop Bot?</span>
+                        <span class="text-teal-500 font-bold text-xl faq-icon">+</span>
+                    </button>
+                    <div class="px-6 pb-4 hidden faq-content">
+                        <p class="text-gray-600">WhatsApp Desktop Bot is a powerful local desktop software designed to automate your WhatsApp marketing, send bulk messages, and manage campaigns efficiently without relying on cloud servers.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="border border-gray-200 rounded-xl bg-white overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none faq-btn">
+                        <span class="font-bold text-gray-800">Is my data secure?</span>
+                        <span class="text-teal-500 font-bold text-xl faq-icon">+</span>
+                    </button>
+                    <div class="px-6 pb-4 hidden faq-content">
+                        <p class="text-gray-600">Absolutely. Since this is a local Desktop Application, all your contacts, messages, and campaigns are stored securely on your own computer. Total privacy guaranteed.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="border border-gray-200 rounded-xl bg-white overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none faq-btn">
+                        <span class="font-bold text-gray-800">Can I send messages in bulk?</span>
+                        <span class="text-teal-500 font-bold text-xl faq-icon">+</span>
+                    </button>
+                    <div class="px-6 pb-4 hidden faq-content">
+                        <p class="text-gray-600">Yes, you can import contacts from files and send bulk campaigns easily. The software includes smart anti-ban delays to mimic human behavior.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="border border-gray-200 rounded-xl bg-white overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none faq-btn">
+                        <span class="font-bold text-gray-800">How do I personalize messages?</span>
+                        <span class="text-teal-500 font-bold text-xl faq-icon">+</span>
+                    </button>
+                    <div class="px-6 pb-4 hidden faq-content">
+                        <p class="text-gray-600">You can use dynamic variables like {{name}} in your message templates. When sending a campaign, the bot will automatically replace the variable with the contact's actual name.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="border border-gray-200 rounded-xl bg-white overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none faq-btn">
+                        <span class="font-bold text-gray-800">Can I create and save message templates?</span>
+                        <span class="text-teal-500 font-bold text-xl faq-icon">+</span>
+                    </button>
+                    <div class="px-6 pb-4 hidden faq-content">
+                        <p class="text-gray-600">Yes! You can save your best performing text and multimedia messages as templates and reuse them anytime with a single click.</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Decorative background elements (similar to the image dots) -->
+            <div class="absolute right-0 top-0 w-64 h-full opacity-20 pointer-events-none hidden md:block">
+                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="100" r="3" fill="#0d9488"/>
+                    <circle cx="150" cy="50" r="2" fill="#0d9488"/>
+                    <circle cx="100" cy="200" r="4" fill="#0d9488"/>
+                    <line x1="50" y1="100" x2="150" y2="50" stroke="#0d9488" stroke-width="0.5"/>
+                    <line x1="50" y1="100" x2="100" y2="200" stroke="#0d9488" stroke-width="0.5"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqBtns = document.querySelectorAll('.faq-btn');
+            faqBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('.faq-icon');
+                    
+                    // Toggle current
+                    if (content.classList.contains('hidden')) {
+                        content.classList.remove('hidden');
+                        icon.textContent = '-';
+                    } else {
+                        content.classList.add('hidden');
+                        icon.textContent = '+';
+                    }
+                });
+            });
+        });
+    </script>
+
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center items-center mb-4">
+                <i class="fab fa-whatsapp text-green-500 text-2xl mr-2"></i>
+                <span class="font-bold text-xl text-white">WA Bot</span>
+            </div>
+            <p class="mb-6">&copy; 2026 WhatsApp Desktop Bot. All rights reserved.</p>
+            <div class="space-x-4">
+                <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition">Terms of Service</a>
+                <a href="#" class="hover:text-white transition">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

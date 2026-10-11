@@ -1,0 +1,43 @@
+{
+  "name": "whatsapp-bot-desktop-pro",
+  "version": "3.0.0",
+  "description": "Standalone Multi-Account WhatsApp Bot Desktop Application (5 Accounts, Smart Quota Rotation, Excel/JSON Templates, Media & Server ACK, Live Analytics & Reports)",
+  "author": "WhatsApp Bot Pro Team",
+  "main": "electron-main.cjs",
+  "type": "module",
+  "scripts": {
+    "start": "node desktop-launcher.js",
+    "server": "node server.js",
+    "electron": "electron electron-main.cjs",
+    "test": "node test.js",
+    "build": "node --experimental-require-module ./node_modules/electron-builder/out/cli/cli.js --win"
+  },
+  "build": {
+    "appId": "com.whatsapp.bot.pro",
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
+      "installerSidebar": "build/installerSidebar.bmp"
+    }
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "^6.7.19",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsdom": "^27.0.1",
+    "pino": "^9.0.0",
+    "puppeteer": "^24.43.1",
+    "qrcode": "^1.5.3",
+    "qrcode-terminal": "^0.12.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "7zip-bin": "^5.2.0",
+    "electron": "^41.7.1",
+    "electron-builder": "^26.15.3"
+  }
+}

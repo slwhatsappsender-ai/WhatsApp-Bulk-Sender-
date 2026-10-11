@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Bot Desktop PRO - Automated Bulk Messaging for Windows</title>
+  <meta name="description" content="Ultimate WhatsApp bulk marketing & automation desktop software for Windows. Multi-account rotation, anti-ban cooldowns, voice notes, stickers, polls, and delivery analytics.">
+  <link rel="icon" type="image/png" href="images/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: rgba(18, 24, 38, 0.75);
+      --bg-card-hover: rgba(26, 35, 55, 0.85);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(37, 211, 102, 0.3);
+      --primary: #25d366;
+      --primary-glow: rgba(37, 211, 102, 0.35);
+      --teal: #14b8a6;
+      --purple: #8b5cf6;
+      --txt-main: #f8fafc;
+      --txt-muted: #94a3b8;
+      --txt-sub: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--txt-main);
+      overflow-x: hidden;
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(37, 211, 102, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 60%, rgba(139, 92, 246, 0.07) 0%, transparent 45%);
+      background-attachment: fixed;
+    }
+
+    h1, h2, h3, h4, .brand-font {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      backdrop-filter: blur(16px);
+      background: rgba(9, 13, 22, 0.8);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--txt-main);
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: white;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--txt-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14.5px;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 26px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #25d366, #059669);
+      color: #032b12;
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(37, 211, 102, 0.45);
+      color: #021e0d;
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border);
+      color: var(--txt-main);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-lg {
+      padding: 16px 36px;
+      font-size: 17px;
+      border-radius: 14px;
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1200px;
+      margin: 80px auto 60px;
+      padding: 0 24px;
+      text-align: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(37, 211, 102, 0.1);
+      border: 1px solid var(--border-highlight);
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 900;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #ffffff 30%, #25d366 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--txt-muted);
+      max-width: 760px;
+      margin: 0 auto 38px;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .download-meta {
+      font-size: 13px;
+      color: var(--txt-sub);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    /* App Preview Mockup */
+    .preview-section {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 24px;
+    }
+
+    .mockup-window {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(37, 211, 102, 0.1);
+      position: relative;
+    }
+
+    .mockup-header {
+      background: rgba(13, 18, 30, 0.9);
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mockup-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+
+    .mockup-title {
+      font-size: 12px;
+      color: var(--txt-muted);
+      margin-left: 10px;
+      font-weight: 600;
+    }
+
+    .mockup-body {
+      padding: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .mini-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    /* Features Grid */
+    .section-title {
+      text-align: center;
+      max-width: 700px;
+      margin: 100px auto 50px;
+      padding: 0 24px;
+    }
+
+    .section-title h2 {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+
+    .section-title p {
+      color: var(--txt-muted);
+      font-size: 17px;
+    }
+
+    .features-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 28px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-highlight);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .feature-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 22px;
+    }
+
+    .icon-green { background: rgba(37, 211, 102, 0.15); color: #25d366; }
+    .icon-teal { background: rgba(20, 184, 166, 0.15); color: #14b8a6; }
+    .icon-purple { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
+    .icon-blue { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+    .icon-yellow { background: rgba(234, 179, 8, 0.15); color: #eab308; }
+    .icon-pink { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
+
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      color: var(--txt-muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    /* Pricing Section */
+    .pricing-wrap {
+      max-width: 1000px;
+      margin: 40px auto 100px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      position: relative;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(14px);
+    }
+
+    .pricing-card.featured {
+      border-color: #25d366;
+      box-shadow: 0 0 35px rgba(37, 211, 102, 0.2);
+    }
+
+    .popular-tag {
+      position: absolute;
+      top: -14px;
+      right: 32px;
+      background: linear-gradient(135deg, #25d366, #059669);
+      color: #032b12;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 14px;
+      border-radius: 999px;
+    }
+
+    .plan-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .plan-price {
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .plan-price span {
+      font-size: 16px;
+      color: var(--txt-muted);
+      font-weight: 500;
+    }
+
+    .plan-desc {
+      color: var(--txt-muted);
+      font-size: 14px;
+      margin-bottom: 26px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .plan-features {
+      list-style: none;
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14.5px;
+      color: #cbd5e1;
+    }
+
+    .plan-features li i {
+      color: var(--primary);
+      font-size: 14px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 60px 48px 40px;
+      background: rgba(9, 13, 22, 0.95);
+      text-align: center;
+      color: var(--txt-sub);
+      font-size: 14px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--txt-muted);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 16px 20px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .mockup-body {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <a href="#" class="brand">
+      <div class="brand-icon"><i class="fab fa-whatsapp"></i></div>
+      <span>WhatsApp Bot <span style="color:var(--primary);">PRO</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#download">Download</a></li>
+    </ul>
+    <a href="#download" class="btn btn-primary">
+      <i class="fas fa-download"></i> Download Free
+    </a>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="badge-pill">
+      <i class="fas fa-bolt"></i> Version 3.0.0 Now Available for Windows 64-bit
+    </div>
+    <h1>The Ultimate <span class="text-gradient">WhatsApp Automation</span> Software for Windows</h1>
+    <p>Automate marketing broadcasts, rotate multiple accounts, schedule smart campaigns, send rich media with live previews, and track real-time delivery receipts.</p>
+    
+    <div class="hero-actions" id="download">
+      <a href="https://github.com/slwhatsappsender-ai/WhatsApp-Bulk-Sender-/releases/download/v3.0.0/whatsapp-bot-desktop-pro.Setup.3.0.0.exe" id="main-download-btn" class="btn btn-primary btn-lg">
+        <i class="fab fa-windows" style="font-size: 20px;"></i> Download for Windows
+      </a>
+      <a href="#pricing" class="btn btn-outline btn-lg">
+        <i class="fas fa-crown" style="color: #f59e0b;"></i> View PRO Plans
+      </a>
+    </div>
+
+    <div class="download-meta">
+      <span><i class="fas fa-check-circle" style="color:#10b981;"></i> Windows 10 & 11 (64-bit)</span>
+      <span>•</span>
+      <span><i class="fas fa-shield-halved" style="color:#10b981;"></i> Safe & Anti-Ban Cooldown</span>
+      <span>•</span>
+      <span><i class="fas fa-box" style="color:#10b981;"></i> Standalone Desktop App</span>
+    </div>
+  </header>
+
+  <!-- Software Feature Mockup -->
+  <section class="preview-section">
+    <div class="mockup-window">
+      <div class="mockup-header">
+        <div class="mockup-dot dot-red"></div>
+        <div class="mockup-dot dot-yellow"></div>
+        <div class="mockup-dot dot-green"></div>
+        <span class="mockup-title">WhatsApp Bot Desktop PRO v3.0.0 — Modern 4-Step Campaign Console</span>
+      </div>
+      <div style="background:#0c101d; border-bottom:1px solid var(--border);">
+        <img src="images/hero.jpg" alt="WhatsApp Bot Desktop PRO Dashboard" style="width:100%; max-height:480px; object-fit:cover; display:block;">
+      </div>
+      <div class="mockup-body">
+        <div class="mini-card">
+          <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
+            <i class="fas fa-sliders-h"></i> 4-Step Wizard
+          </div>
+          <div style="font-size: 12px; color: var(--txt-muted);">Compose Message ➔ Select Audience ➔ Anti-Ban Speed ➔ Live Dispatch Console.</div>
+        </div>
+        <div class="mini-card">
+          <div style="font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 8px;">
+            <i class="fas fa-mobile-alt"></i> Live Phone Mockup
+          </div>
+          <div style="font-size: 12px; color: var(--txt-muted);">Simulated WhatsApp chat preview updating in real-time as you compose.</div>
+        </div>
+        <div class="mini-card">
+          <div style="font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 8px;">
+            <i class="fas fa-shield-alt"></i> Anti-Ban Guard
+          </div>
+          <div style="font-size: 12px; color: var(--txt-muted);">Random/fixed human delays, batching pauses & round-robin bot account rotation.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section" id="features">
+    <div class="section-title">
+      <h2>Engineered for High-Converting Outreach</h2>
+      <p>Everything you need to broadcast, engage, and manage customer communications securely on WhatsApp.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon icon-green"><i class="fas fa-robot"></i></div>
+        <h3>Multi-Bot Round Robin</h3>
+        <p>Connect up to 5 WhatsApp accounts simultaneously. Automatically distribute and balance messages across all bots to maintain safety and high deliverability.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-teal"><i class="fas fa-bolt"></i></div>
+        <h3>Zero Re-Upload Forward Engine</h3>
+        <p>Send large videos, images, and documents once to your own number, and forward them to thousands of recipients instantaneously with zero repeated upload bandwidth.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-purple"><i class="fas fa-microphone"></i></div>
+        <h3>Studio Audio & Voice Notes</h3>
+        <p>Send authentic WhatsApp voice notes (Push-to-Talk) with genuine sound waveforms and exact audio durations. Record directly in-app or upload audio clips.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-yellow"><i class="fas fa-poll-h"></i></div>
+        <h3>WhatsApp Interactive Polls</h3>
+        <p>Create and dispatch real native WhatsApp Polls with multi-select support directly to customer inboxes to gather feedback and generate leads.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-blue"><i class="fas fa-icons"></i></div>
+        <h3>Built-in Sticker Studio</h3>
+        <p>Create transparent 512x512 WhatsApp stickers directly inside the app with text overlays, outlines, and send them as native stickers.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-pink"><i class="fas fa-check-double"></i></div>
+        <h3>Live Analytics & Read Receipts</h3>
+        <p>Track delivery double ticks and blue read receipts in real-time. Includes CSV export and the ability to Revoke/Recall messages from recipients.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing">
+    <div class="section-title">
+      <h2>Simple, Transparent Pricing</h2>
+      <p>Upgrade to WhatsApp Bot Desktop PRO for unlimited accounts and high-volume dispatch.</p>
+    </div>
+
+    <div class="pricing-wrap">
+      <!-- Monthly Plan -->
+      <div class="pricing-card featured">
+        <div class="popular-tag">Most Popular</div>
+        <div class="plan-name">PRO Monthly</div>
+        <div class="plan-price">$10 <span>/ month</span></div>
+        <div class="plan-desc">Perfect for growing businesses, marketing agencies, and freelancers.</div>
+        <ul class="plan-features">
+          <li><i class="fas fa-check-circle"></i> Connect up to 5 WhatsApp Accounts</li>
+          <li><i class="fas fa-check-circle"></i> Unlimited Daily Broadcasts</li>
+          <li><i class="fas fa-check-circle"></i> Multi-Bot Round-Robin Rotation</li>
+          <li><i class="fas fa-check-circle"></i> Voice Notes & Audio Suite</li>
+          <li><i class="fas fa-check-circle"></i> Sticker Studio & Image Cropper</li>
+          <li><i class="fas fa-check-circle"></i> Auto Instant License Activation</li>
+        </ul>
+        <a href="https://buy.stripe.com/3cI4gA5Xa2U711DajHfYY00" class="btn btn-primary" style="width: 100%;">
+          Get Started ($10/mo)
+        </a>
+      </div>
+
+      <!-- Yearly Plan -->
+      <div class="pricing-card">
+        <div class="plan-name">PRO Yearly / Lifetime</div>
+        <div class="plan-price">$100 <span>/ year</span></div>
+        <div class="plan-desc">Best value for high-volume marketing teams and continuous campaigns.</div>
+        <ul class="plan-features">
+          <li><i class="fas fa-check-circle"></i> All PRO Features Included</li>
+          <li><i class="fas fa-check-circle"></i> 2 Months Free (Save $20/yr)</li>
+          <li><i class="fas fa-check-circle"></i> Priority Delivery Updates</li>
+          <li><i class="fas fa-check-circle"></i> Unlimited Excel & Group Imports</li>
+          <li><i class="fas fa-check-circle"></i> Single Device Hard-Lock Security</li>
+          <li><i class="fas fa-check-circle"></i> Direct Customer Support</li>
+        </ul>
+        <a href="https://buy.stripe.com/5kQ7sM99m9iv25HezXfYY01" class="btn btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.2);">
+          Get Yearly ($100/yr)
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <ul class="footer-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#download">Download</a></li>
+      <li><a href="https://buy.stripe.com/3cI4gA5Xa2U711DajHfYY00">PRO Monthly ($10)</a></li>
+      <li><a href="https://buy.stripe.com/5kQ7sM99m9iv25HezXfYY01">PRO Yearly ($100)</a></li>
+    </ul>
+    <p>© 2026 WhatsApp Bot Desktop PRO. Built for high-performance marketing and communication automation on Windows.</p>
+  </footer>
+
+</body>
+</html>
